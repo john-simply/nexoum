@@ -1,7 +1,40 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useLayoutEffect, useRef } from "react";
+
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  // DOM REFERENCES
+  const landingContent = useRef();
+
+  useLayoutEffect(() => {
+    console.log("yes");
+    let ctx = gsap.context(() => {
+      gsap.set(".image-wrapper img", {
+        width: "80%",
+        borderRadius: "10px",
+      });
+
+      gsap.to(".image-wrapper img", {
+        scrollTrigger: {
+          trigger: ".heading",
+          start: "top-=10 top+=100",
+          scrub: 1,
+          markers: true,
+          ease: "ease",
+        },
+        width: "100%",
+        borderRadius: "0px;",
+      });
+    }, landingContent);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div>
       <Head>
@@ -22,11 +55,11 @@ export default function Home() {
       </Head>
 
       <main>
-        <div className='landing-hero'>
+        <section className='landing-hero' ref={landingContent}>
           <div className='landing-hero__content max-width'>
             <h1 class='heading'>
-              <span class='first-line'>Why going digital is</span>
-              <span class='second-line'>your key to success</span>
+              <span className='first-line'>Why going digital is</span>
+              <span className='second-line'>your key to success</span>
             </h1>
             <p className='text'>
               Helping start-ups, tech companies and businesses launch new
@@ -43,7 +76,17 @@ export default function Home() {
               height={500}
             />
           </figure>
-        </div>
+        </section>
+
+        <section className='main-wrapper'>
+          <div className='main-wrapper__content max-width'>
+            <h2 className='heading'>
+              <span class='first-line'>What working with us</span>
+              <span class='second-line'>Means for the future</span>
+              <span class='third-line'>of your business</span>
+            </h2>
+          </div>
+        </section>
       </main>
 
       <footer></footer>
